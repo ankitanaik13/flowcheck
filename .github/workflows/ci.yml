@@ -1,0 +1,28 @@
+name: reliability-checks
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+      - run: pip install -r requirements.lock.txt
+      - uses: actions/cache@v4
+        with:
+          path: data
+          key: uci-online-retail-f5385cbb-v1
+      - run: python scripts/prepare_data.py
+      - run: ruff check src scripts tests
+      - run: pytest -q --cov=pipelinemedic --cov-fail-under=90 --cov-report=json:artifacts/coverage.json --junitxml=artifacts/tests.xml
+      - run: python scripts/benchmark.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: reliability-evidence
+          path: artifacts/

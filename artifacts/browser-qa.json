@@ -1,0 +1,15 @@
+{
+  "method": "Interactive browser verification",
+  "checks": [
+    "Desktop 1440x1000 layout inspected",
+    "Mobile 390x844 layout inspected; document width equals viewport after fix",
+    "Join fan-out investigation completes through UI",
+    "Repair evidence and before/after metrics visible",
+    "Approval activates verified state",
+    "Rollback restores original state",
+    "Genuine business change produces no repair",
+    "Evaluation dashboard shows measured benchmark",
+    "Live Qwen2.5:7b join fan-out investigation completes through UI with a verified repair"
+  ],
+  "limitations": "Interactive checks, not an exhaustive cross-browser certification"
+}

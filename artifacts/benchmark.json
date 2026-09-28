@@ -1,0 +1,2297 @@
+{
+  "available": true,
+  "created": "2026-09-28T00:54:26.045035+00:00",
+  "mode": "offline",
+  "disclosure": "Controlled benchmark on real UCI source batches. Offline mode uses a deterministic LangGraph evidence policy, not an LLM. Known fault families; held-out dates, seeds, and severities. Source contracts are unusually strong in this laboratory.",
+  "total_cases": 120,
+  "fault_cases": 96,
+  "root_accuracy": 1.0,
+  "repair_success": 1.0,
+  "unnecessary_repairs": 0,
+  "median_latency_ms": 47.195,
+  "detectors": [
+    {
+      "name": "Explicit source + transformation contracts",
+      "tp": 96,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    {
+      "name": "Isolation Forest novelty",
+      "tp": 16,
+      "fp": 5,
+      "fn": 80,
+      "precision": 0.7619047619047619,
+      "recall": 0.16666666666666666,
+      "f1": 0.27350427350427353
+    },
+    {
+      "name": "Robust median absolute deviation",
+      "tp": 24,
+      "fp": 8,
+      "fn": 72,
+      "precision": 0.75,
+      "recall": 0.25,
+      "f1": 0.375
+    },
+    {
+      "name": "Contracts + Isolation Forest",
+      "tp": 96,
+      "fp": 5,
+      "fn": 0,
+      "precision": 0.9504950495049505,
+      "recall": 1.0,
+      "f1": 0.9746192893401014
+    }
+  ],
+  "by_scenario": [
+    {
+      "scenario": "clean",
+      "cases": 12,
+      "correct": 12,
+      "restored": 0,
+      "proposed": 0
+    },
+    {
+      "scenario": "duplicate_ingestion",
+      "cases": 12,
+      "correct": 12,
+      "restored": 12,
+      "proposed": 12
+    },
+    {
+      "scenario": "missing_partition",
+      "cases": 12,
+      "correct": 12,
+      "restored": 12,
+      "proposed": 12
+    },
+    {
+      "scenario": "null_country",
+      "cases": 12,
+      "correct": 12,
+      "restored": 12,
+      "proposed": 12
+    },
+    {
+      "scenario": "unit_scale",
+      "cases": 12,
+      "correct": 12,
+      "restored": 12,
+      "proposed": 12
+    },
+    {
+      "scenario": "join_fanout",
+      "cases": 12,
+      "correct": 12,
+      "restored": 12,
+      "proposed": 12
+    },
+    {
+      "scenario": "wrong_filter",
+      "cases": 12,
+      "correct": 12,
+      "restored": 12,
+      "proposed": 12
+    },
+    {
+      "scenario": "schema_rename",
+      "cases": 12,
+      "correct": 12,
+      "restored": 12,
+      "proposed": 12
+    },
+    {
+      "scenario": "genuine_shift",
+      "cases": 12,
+      "correct": 12,
+      "restored": 0,
+      "proposed": 0
+    },
+    {
+      "scenario": "compound",
+      "cases": 12,
+      "correct": 12,
+      "restored": 12,
+      "proposed": 12
+    }
+  ],
+  "limitations": "Known fault families and a trusted immutable source make this a bounded repair benchmark. Distribution anomalies are not corruption labels. No claim of unseen-fault generalization, real production MTTR reduction, or superiority of an LLM is supported.",
+  "cases": [
+    {
+      "date": "2011-09-01",
+      "scenario": "clean",
+      "seed": 1009,
+      "severity": 0.12,
+      "positive": false,
+      "correct": true,
+      "proposed": false,
+      "restored": false,
+      "contracts": false,
+      "isolation_forest": false,
+      "robust_mad": false,
+      "hybrid": false,
+      "elapsed_ms": 208.84,
+      "roots": [
+        "healthy"
+      ]
+    },
+    {
+      "date": "2011-09-01",
+      "scenario": "duplicate_ingestion",
+      "seed": 1009,
+      "severity": 0.12,
+      "positive": true,
+      "correct": true,
+      "proposed": true,
+      "restored": true,
+      "contracts": true,
+      "isolation_forest": false,
+      "robust_mad": false,
+      "hybrid": true,
+      "elapsed_ms": 57.64,
+      "roots": [
+        "ingestion_replay"
+      ]
+    },
+    {
+      "date": "2011-09-01",
+      "scenario": "missing_partition",
+      "seed": 1009,
+      "severity": 0.12,
+      "positive": true,
+      "correct": true,
+      "proposed": true,
+      "restored": true,
+      "contracts": true,
+      "isolation_forest": false,
+      "robust_mad": false,
+      "hybrid": true,
+      "elapsed_ms": 51.99,
+      "roots": [
+        "incomplete_delivery"
+      ]
+    },
+    {
+      "date": "2011-09-01",
+      "scenario": "null_country",
+      "seed": 1009,
+      "severity": 0.12,
+      "positive": true,
+      "correct": true,
+      "proposed": true,
+      "restored": true,
+      "contracts": true,
+      "isolation_forest": false,
+      "robust_mad": false,
+      "hybrid": true,
+      "elapsed_ms": 48.06,
+      "roots": [
+        "field_mapping"
+      ]
+    },
+    {
+      "date": "2011-09-01",
+      "scenario": "unit_scale",
+      "seed": 1009,
+      "severity": 0.12,
+      "positive": true,
+      "correct": true,
+      "proposed": true,
+      "restored": true,
+      "contracts": true,
+      "isolation_forest": true,
+      "robust_mad": true,
+      "hybrid": true,
+      "elapsed_ms": 51.3,
+      "roots": [
+        "unit_conversion"
+      ]
+    },
+    {
+      "date": "2011-09-01",
+      "scenario": "join_fanout",
+      "seed": 1009,
+      "severity": 0.12,
+      "positive": true,
+      "correct": true,
+      "proposed": true,
+      "restored": true,
+      "contracts": true,
+      "isolation_forest": false,
+      "robust_mad": false,
+      "hybrid": true,
+      "elapsed_ms": 55.44,
+      "roots": [
+        "dimension_keys"
+      ]
+    },
+    {
+      "date": "2011-09-01",
+      "scenario": "wrong_filter",
+      "seed": 1009,
+      "severity": 0.12,
+      "positive": true,
+      "correct": true,
+      "proposed": true,
+      "restored": true,
+      "contracts": true,
+      "isolation_forest": false,
+      "robust_mad": false,
+      "hybrid": true,
+      "elapsed_ms": 45.41,
+      "roots": [
+        "transform_regression"
+      ]
+    },
+    {
+      "date": "2011-09-01",
+      "scenario": "schema_rename",
+      "seed": 1009,
+      "severity": 0.12,
+      "positive": true,
+      "correct": true,
+      "proposed": true,
+      "restored": true,
+      "contracts": true,
+      "isolation_forest": false,
+      "robust_mad": false,
+      "hybrid": true,
+      "elapsed_ms": 38.83,
+      "roots": [
+        "schema_contract"
+      ]
+    },
+    {
+      "date": "2011-09-01",
+      "scenario": "genuine_shift",
+      "seed": 1009,
+      "severity": 0.12,
+      "positive": false,
+      "correct": true,
+      "proposed": false,
+      "restored": false,
+      "contracts": false,
+      "isolation_forest": false,
+      "robust_mad": false,
+      "hybrid": false,
+      "elapsed_ms": 20.93,
+      "roots": [
+        "healthy"
+      ]
+    },
+    {
+      "date": "2011-09-01",
+      "scenario": "compound",
+      "seed": 1009,
+      "severity": 0.12,
+      "positive": true,
+      "correct": true,
+      "proposed": true,
+      "restored": true,
+      "contracts": true,
+      "isolation_forest": false,
+      "robust_mad": false,
+      "hybrid": true,
+      "elapsed_ms": 49.3,
+      "roots": [
+        "dimension_keys",
+        "ingestion_replay"
+      ]
+    },
+    {
+      "date": "2011-09-09",
+      "scenario": "clean",
+      "seed": 1106,
+      "severity": 0.37,
+      "positive": false,
+      "correct": true,
+      "proposed": false,
+      "restored": false,
+      "contracts": false,
+      "isolation_forest": false,
+      "robust_mad": false,
+      "hybrid": false,
+      "elapsed_ms": 22.76,
+      "roots": [
+        "healthy"
+      ]
+    },
+    {
+      "date": "2011-09-09",
+      "scenario": "duplicate_ingestion",
+      "seed": 1106,
+      "severity": 0.37,
+      "positive": true,
+      "correct": true,
+      "proposed": true,
+      "restored": true,
+      "contracts": true,
+      "isolation_forest": false,
+      "robust_mad": false,
+      "hybrid": true,
+      "elapsed_ms": 47.1,
+      "roots": [
+        "ingestion_replay"
+      ]
+    },
+    {
+      "date": "2011-09-09",
+      "scenario": "missing_partition",
+      "seed": 1106,
+      "severity": 0.37,
+      "positive": true,
+      "correct": true,
+      "proposed": true,
+      "restored": true,
+      "contracts": true,
+      "isolation_forest": false,
+      "robust_mad": false,
+      "hybrid": true,
+      "elapsed_ms": 45.95,
+      "roots": [
+        "incomplete_delivery"
+      ]
+    },
+    {
+      "date": "2011-09-09",
+      "scenario": "null_country",
+      "seed": 1106,
+      "severity": 0.37,
+      "positive": true,
+      "correct": true,
+      "proposed": true,
+      "restored": true,
+      "contracts": true,
+      "isolation_forest": false,
+      "robust_mad": false,
+      "hybrid": true,
+      "elapsed_ms": 45.59,
+      "roots": [
+        "field_mapping"
+      ]
+    },
+    {
+      "date": "2011-09-09",
+      "scenario": "unit_scale",
+      "seed": 1106,
+      "severity": 0.37,
+      "positive": true,
+      "correct": true,
+      "proposed": true,
+      "restored": true,
+      "contracts": true,
+      "isolation_forest": true,
+      "robust_mad": true,
+      "hybrid": true,
+      "elapsed_ms": 46.42,
+      "roots": [
+        "unit_conversion"
+      ]
+    },
+    {
+      "date": "2011-09-09",
+      "scenario": "join_fanout",
+      "seed": 1106,
+      "severity": 0.37,
+      "positive": true,
+      "correct": true,
+      "proposed": true,
+      "restored": true,
+      "contracts": true,
+      "isolation_forest": false,
+      "robust_mad": false,
+      "hybrid": true,
+      "elapsed_ms": 44.78,
+      "roots": [
+        "dimension_keys"
+      ]
+    },
+    {
+      "date": "2011-09-09",
+      "scenario": "wrong_filter",
+      "seed": 1106,
+      "severity": 0.37,
+      "positive": true,
+      "correct": true,
+      "proposed": true,
+      "restored": true,
+      "contracts": true,
+      "isolation_forest": false,
+      "robust_mad": false,
+      "hybrid": true,
+      "elapsed_ms": 44.06,
+      "roots": [
+        "transform_regression"
+      ]
+    },
+    {
+      "date": "2011-09-09",
+      "scenario": "schema_rename",
+      "seed": 1106,
+      "severity": 0.37,
+      "positive": true,
+      "correct": true,
+      "proposed": true,
+      "restored": true,
+      "contracts": true,
+      "isolation_forest": false,
+      "robust_mad": false,
+      "hybrid": true,
+      "elapsed_ms": 33.45,
+      "roots": [
+        "schema_contract"
+      ]
+    },
+    {
+      "date": "2011-09-09",
+      "scenario": "genuine_shift",
+      "seed": 1106,
+      "severity": 0.37,
+      "positive": false,
+      "correct": true,
+      "proposed": false,
+      "restored": false,
+      "contracts": false,
+      "isolation_forest": false,
+      "robust_mad": false,
+      "hybrid": false,
+      "elapsed_ms": 21.26,
+      "roots": [
+        "healthy"
+      ]
+    },
+    {
+      "date": "2011-09-09",
+      "scenario": "compound",
+      "seed": 1106,
+      "severity": 0.37,
+      "positive": true,
+      "correct": true,
+      "proposed": true,
+      "restored": true,
+      "contracts": true,
+      "isolation_forest": false,
+      "robust_mad": false,
+      "hybrid": true,
+      "elapsed_ms": 51.38,
+      "roots": [
+        "dimension_keys",
+        "ingestion_replay"
+      ]
+    },
+    {
+      "date": "2011-09-18",
+      "scenario": "clean",
+      "seed": 1203,
+      "severity": 0.63,
+      "positive": false,
+      "correct": true,
+      "proposed": false,
+      "restored": false,
+      "contracts": false,
+      "isolation_forest": false,
+      "robust_mad": false,
+      "hybrid": false,
+      "elapsed_ms": 19.91,
+      "roots": [
+        "healthy"
+      ]
+    },
+    {
+      "date": "2011-09-18",
+      "scenario": "duplicate_ingestion",
+      "seed": 1203,
+      "severity": 0.63,
+      "positive": true,
+      "correct": true,
+      "proposed": true,
+      "restored": true,
+      "contracts": true,
+      "isolation_forest": false,
+      "robust_mad": false,
+      "hybrid": true,
+      "elapsed_ms": 44.68,
+      "roots": [
+        "ingestion_replay"
+      ]
+    },
+    {
+      "date": "2011-09-18",
+      "scenario": "missing_partition",
+      "seed": 1203,
+      "severity": 0.63,
+      "positive": true,
+      "correct": true,
+      "proposed": true,
+      "restored": true,
+      "contracts": true,
+      "isolation_forest": false,
+      "robust_mad": false,
+      "hybrid": true,
+      "elapsed_ms": 41.86,
+      "roots": [
+        "incomplete_delivery"
+      ]
+    },
+    {
+      "date": "2011-09-18",
+      "scenario": "null_country",
+      "seed": 1203,
+      "severity": 0.63,
+      "positive": true,
+      "correct": true,
+      "proposed": true,
+      "restored": true,
+      "contracts": true,
+      "isolation_forest": false,
+      "robust_mad": false,
+      "hybrid": true,
+      "elapsed_ms": 42.23,
+      "roots": [
+        "field_mapping"
+      ]
+    },
+    {
+      "date": "2011-09-18",
+      "scenario": "unit_scale",
+      "seed": 1203,
+      "severity": 0.63,
+      "positive": true,
+      "correct": true,
+      "proposed": true,
+      "restored": true,
+      "contracts": true,
+      "isolation_forest": true,
+      "robust_mad": true,
+      "hybrid": true,
+      "elapsed_ms": 42.83,
+      "roots": [
+        "unit_conversion"
+      ]
+    },
+    {
+      "date": "2011-09-18",
+      "scenario": "join_fanout",
+      "seed": 1203,
+      "severity": 0.63,
+      "positive": true,
+      "correct": true,
+      "proposed": true,
+      "restored": true,
+      "contracts": true,
+      "isolation_forest": false,
+      "robust_mad": false,
+      "hybrid": true,
+      "elapsed_ms": 42.38,
+      "roots": [
+        "dimension_keys"
+      ]
+    },
+    {
+      "date": "2011-09-18",
+      "scenario": "wrong_filter",
+      "seed": 1203,
+      "severity": 0.63,
+      "positive": true,
+      "correct": true,
+      "proposed": true,
+      "restored": true,
+      "contracts": true,
+      "isolation_forest": false,
+      "robust_mad": false,
+      "hybrid": true,
+      "elapsed_ms": 41.48,
+      "roots": [
+        "transform_regression"
+      ]
+    },
+    {
+      "date": "2011-09-18",
+      "scenario": "schema_rename",
+      "seed": 1203,
+      "severity": 0.63,
+      "positive": true,
+      "correct": true,
+      "proposed": true,
+      "restored": true,
+      "contracts": true,
+      "isolation_forest": false,
+      "robust_mad": false,
+      "hybrid": true,
+      "elapsed_ms": 31.98,
+      "roots": [
+        "schema_contract"
+      ]
+    },
+    {
+      "date": "2011-09-18",
+      "scenario": "genuine_shift",
+      "seed": 1203,
+      "severity": 0.63,
+      "positive": false,
+      "correct": true,
+      "proposed": false,
+      "restored": false,
+      "contracts": false,
+      "isolation_forest": false,
+      "robust_mad": false,
+      "hybrid": false,
+      "elapsed_ms": 20.3,
+      "roots": [
+        "healthy"
+      ]
+    },
+    {
+      "date": "2011-09-18",
+      "scenario": "compound",
+      "seed": 1203,
+      "severity": 0.63,
+      "positive": true,
+      "correct": true,
+      "proposed": true,
+      "restored": true,
+      "contracts": true,
+      "isolation_forest": false,
+      "robust_mad": false,
+      "hybrid": true,
+      "elapsed_ms": 45.15,
+      "roots": [
+        "dimension_keys",
+        "ingestion_replay"
+      ]
+    },
+    {
+      "date": "2011-09-26",
+      "scenario": "clean",
+      "seed": 1300,
+      "severity": 0.12,
+      "positive": false,
+      "correct": true,
+      "proposed": false,
+      "restored": false,
+      "contracts": false,
+      "isolation_forest": false,
+      "robust_mad": false,
+      "hybrid": false,
+      "elapsed_ms": 76.36,
+      "roots": [
+        "healthy"
+      ]
+    },
+    {
+      "date": "2011-09-26",
+      "scenario": "duplicate_ingestion",
+      "seed": 1300,
+      "severity": 0.12,
+      "positive": true,
+      "correct": true,
+      "proposed": true,
+      "restored": true,
+      "contracts": true,
+      "isolation_forest": false,
+      "robust_mad": false,
+      "hybrid": true,
+      "elapsed_ms": 46.21,
+      "roots": [
+        "ingestion_replay"
+      ]
+    },
+    {
+      "date": "2011-09-26",
+      "scenario": "missing_partition",
+      "seed": 1300,
+      "severity": 0.12,
+      "positive": true,
+      "correct": true,
+      "proposed": true,
+      "restored": true,
+      "contracts": true,
+      "isolation_forest": false,
+      "robust_mad": false,
+      "hybrid": true,
+      "elapsed_ms": 44.52,
+      "roots": [
+        "incomplete_delivery"
+      ]
+    },
+    {
+      "date": "2011-09-26",
+      "scenario": "null_country",
+      "seed": 1300,
+      "severity": 0.12,
+      "positive": true,
+      "correct": true,
+      "proposed": true,
+      "restored": true,
+      "contracts": true,
+      "isolation_forest": false,
+      "robust_mad": false,
+      "hybrid": true,
+      "elapsed_ms": 43.72,
+      "roots": [
+        "field_mapping"
+      ]
+    },
+    {
+      "date": "2011-09-26",
+      "scenario": "unit_scale",
+      "seed": 1300,
+      "severity": 0.12,
+      "positive": true,
+      "correct": true,
+      "proposed": true,
+      "restored": true,
+      "contracts": true,
+      "isolation_forest": true,
+      "robust_mad": true,
+      "hybrid": true,
+      "elapsed_ms": 43.73,
+      "roots": [
+        "unit_conversion"
+      ]
+    },
+    {
+      "date": "2011-09-26",
+      "scenario": "join_fanout",
+      "seed": 1300,
+      "severity": 0.12,
+      "positive": true,
+      "correct": true,
+      "proposed": true,
+      "restored": true,
+      "contracts": true,
+      "isolation_forest": false,
+      "robust_mad": false,
+      "hybrid": true,
+      "elapsed_ms": 43.72,
+      "roots": [
+        "dimension_keys"
+      ]
+    },
+    {
+      "date": "2011-09-26",
+      "scenario": "wrong_filter",
+      "seed": 1300,
+      "severity": 0.12,
+      "positive": true,
+      "correct": true,
+      "proposed": true,
+      "restored": true,
+      "contracts": true,
+      "isolation_forest": false,
+      "robust_mad": false,
+      "hybrid": true,
+      "elapsed_ms": 46.16,
+      "roots": [
+        "transform_regression"
+      ]
+    },
+    {
+      "date": "2011-09-26",
+      "scenario": "schema_rename",
+      "seed": 1300,
+      "severity": 0.12,
+      "positive": true,
+      "correct": true,
+      "proposed": true,
+      "restored": true,
+      "contracts": true,
+      "isolation_forest": false,
+      "robust_mad": false,
+      "hybrid": true,
+      "elapsed_ms": 33.1,
+      "roots": [
+        "schema_contract"
+      ]
+    },
+    {
+      "date": "2011-09-26",
+      "scenario": "genuine_shift",
+      "seed": 1300,
+      "severity": 0.12,
+      "positive": false,
+      "correct": true,
+      "proposed": false,
+      "restored": false,
+      "contracts": false,
+      "isolation_forest": false,
+      "robust_mad": false,
+      "hybrid": false,
+      "elapsed_ms": 19.91,
+      "roots": [
+        "healthy"
+      ]
+    },
+    {
+      "date": "2011-09-26",
+      "scenario": "compound",
+      "seed": 1300,
+      "severity": 0.12,
+      "positive": true,
+      "correct": true,
+      "proposed": true,
+      "restored": true,
+      "contracts": true,
+      "isolation_forest": false,
+      "robust_mad": false,
+      "hybrid": true,
+      "elapsed_ms": 45.6,
+      "roots": [
+        "dimension_keys",
+        "ingestion_replay"
+      ]
+    },
+    {
+      "date": "2011-10-04",
+      "scenario": "clean",
+      "seed": 1397,
+      "severity": 0.37,
+      "positive": false,
+      "correct": true,
+      "proposed": false,
+      "restored": false,
+      "contracts": false,
+      "isolation_forest": false,
+      "robust_mad": false,
+      "hybrid": false,
+      "elapsed_ms": 22.35,
+      "roots": [
+        "healthy"
+      ]
+    },
+    {
+      "date": "2011-10-04",
+      "scenario": "duplicate_ingestion",
+      "seed": 1397,
+      "severity": 0.37,
+      "positive": true,
+      "correct": true,
+      "proposed": true,
+      "restored": true,
+      "contracts": true,
+      "isolation_forest": false,
+      "robust_mad": false,
+      "hybrid": true,
+      "elapsed_ms": 53.04,
+      "roots": [
+        "ingestion_replay"
+      ]
+    },
+    {
+      "date": "2011-10-04",
+      "scenario": "missing_partition",
+      "seed": 1397,
+      "severity": 0.37,
+      "positive": true,
+      "correct": true,
+      "proposed": true,
+      "restored": true,
+      "contracts": true,
+      "isolation_forest": false,
+      "robust_mad": false,
+      "hybrid": true,
+      "elapsed_ms": 51.22,
+      "roots": [
+        "incomplete_delivery"
+      ]
+    },
+    {
+      "date": "2011-10-04",
+      "scenario": "null_country",
+      "seed": 1397,
+      "severity": 0.37,
+      "positive": true,
+      "correct": true,
+      "proposed": true,
+      "restored": true,
+      "contracts": true,
+      "isolation_forest": false,
+      "robust_mad": false,
+      "hybrid": true,
+      "elapsed_ms": 53.81,
+      "roots": [
+        "field_mapping"
+      ]
+    },
+    {
+      "date": "2011-10-04",
+      "scenario": "unit_scale",
+      "seed": 1397,
+      "severity": 0.37,
+      "positive": true,
+      "correct": true,
+      "proposed": true,
+      "restored": true,
+      "contracts": true,
+      "isolation_forest": true,
+      "robust_mad": true,
+      "hybrid": true,
+      "elapsed_ms": 54.02,
+      "roots": [
+        "unit_conversion"
+      ]
+    },
+    {
+      "date": "2011-10-04",
+      "scenario": "join_fanout",
+      "seed": 1397,
+      "severity": 0.37,
+      "positive": true,
+      "correct": true,
+      "proposed": true,
+      "restored": true,
+      "contracts": true,
+      "isolation_forest": false,
+      "robust_mad": false,
+      "hybrid": true,
+      "elapsed_ms": 66.52,
+      "roots": [
+        "dimension_keys"
+      ]
+    },
+    {
+      "date": "2011-10-04",
+      "scenario": "wrong_filter",
+      "seed": 1397,
+      "severity": 0.37,
+      "positive": true,
+      "correct": true,
+      "proposed": true,
+      "restored": true,
+      "contracts": true,
+      "isolation_forest": false,
+      "robust_mad": false,
+      "hybrid": true,
+      "elapsed_ms": 53.29,
+      "roots": [
+        "transform_regression"
+      ]
+    },
+    {
+      "date": "2011-10-04",
+      "scenario": "schema_rename",
+      "seed": 1397,
+      "severity": 0.37,
+      "positive": true,
+      "correct": true,
+      "proposed": true,
+      "restored": true,
+      "contracts": true,
+      "isolation_forest": false,
+      "robust_mad": false,
+      "hybrid": true,
+      "elapsed_ms": 41.48,
+      "roots": [
+        "schema_contract"
+      ]
+    },
+    {
+      "date": "2011-10-04",
+      "scenario": "genuine_shift",
+      "seed": 1397,
+      "severity": 0.37,
+      "positive": false,
+      "correct": true,
+      "proposed": false,
+      "restored": false,
+      "contracts": false,
+      "isolation_forest": false,
+      "robust_mad": true,
+      "hybrid": false,
+      "elapsed_ms": 23.54,
+      "roots": [
+        "healthy"
+      ]
+    },
+    {
+      "date": "2011-10-04",
+      "scenario": "compound",
+      "seed": 1397,
+      "severity": 0.37,
+      "positive": true,
+      "correct": true,
+      "proposed": true,
+      "restored": true,
+      "contracts": true,
+      "isolation_forest": false,
+      "robust_mad": false,
+      "hybrid": true,
+      "elapsed_ms": 57.03,
+      "roots": [
+        "dimension_keys",
+        "ingestion_replay"
+      ]
+    },
+    {
+      "date": "2011-10-12",
+      "scenario": "clean",
+      "seed": 1494,
+      "severity": 0.63,
+      "positive": false,
+      "correct": true,
+      "proposed": false,
+      "restored": false,
+      "contracts": false,
+      "isolation_forest": false,
+      "robust_mad": false,
+      "hybrid": false,
+      "elapsed_ms": 22.42,
+      "roots": [
+        "healthy"
+      ]
+    },
+    {
+      "date": "2011-10-12",
+      "scenario": "duplicate_ingestion",
+      "seed": 1494,
+      "severity": 0.63,
+      "positive": true,
+      "correct": true,
+      "proposed": true,
+      "restored": true,
+      "contracts": true,
+      "isolation_forest": true,
+      "robust_mad": false,
+      "hybrid": true,
+      "elapsed_ms": 53.82,
+      "roots": [
+        "ingestion_replay"
+      ]
+    },
+    {
+      "date": "2011-10-12",
+      "scenario": "missing_partition",
+      "seed": 1494,
+      "severity": 0.63,
+      "positive": true,
+      "correct": true,
+      "proposed": true,
+      "restored": true,
+      "contracts": true,
+      "isolation_forest": false,
+      "robust_mad": false,
+      "hybrid": true,
+      "elapsed_ms": 50.52,
+      "roots": [
+        "incomplete_delivery"
+      ]
+    },
+    {
+      "date": "2011-10-12",
+      "scenario": "null_country",
+      "seed": 1494,
+      "severity": 0.63,
+      "positive": true,
+      "correct": true,
+      "proposed": true,
+      "restored": true,
+      "contracts": true,
+      "isolation_forest": false,
+      "robust_mad": false,
+      "hybrid": true,
+      "elapsed_ms": 52.67,
+      "roots": [
+        "field_mapping"
+      ]
+    },
+    {
+      "date": "2011-10-12",
+      "scenario": "unit_scale",
+      "seed": 1494,
+      "severity": 0.63,
+      "positive": true,
+      "correct": true,
+      "proposed": true,
+      "restored": true,
+      "contracts": true,
+      "isolation_forest": true,
+      "robust_mad": true,
+      "hybrid": true,
+      "elapsed_ms": 48.26,
+      "roots": [
+        "unit_conversion"
+      ]
+    },
+    {
+      "date": "2011-10-12",
+      "scenario": "join_fanout",
+      "seed": 1494,
+      "severity": 0.63,
+      "positive": true,
+      "correct": true,
+      "proposed": true,
+      "restored": true,
+      "contracts": true,
+      "isolation_forest": false,
+      "robust_mad": false,
+      "hybrid": true,
+      "elapsed_ms": 48.08,
+      "roots": [
+        "dimension_keys"
+      ]
+    },
+    {
+      "date": "2011-10-12",
+      "scenario": "wrong_filter",
+      "seed": 1494,
+      "severity": 0.63,
+      "positive": true,
+      "correct": true,
+      "proposed": true,
+      "restored": true,
+      "contracts": true,
+      "isolation_forest": false,
+      "robust_mad": false,
+      "hybrid": true,
+      "elapsed_ms": 47.68,
+      "roots": [
+        "transform_regression"
+      ]
+    },
+    {
+      "date": "2011-10-12",
+      "scenario": "schema_rename",
+      "seed": 1494,
+      "severity": 0.63,
+      "positive": true,
+      "correct": true,
+      "proposed": true,
+      "restored": true,
+      "contracts": true,
+      "isolation_forest": false,
+      "robust_mad": false,
+      "hybrid": true,
+      "elapsed_ms": 36.19,
+      "roots": [
+        "schema_contract"
+      ]
+    },
+    {
+      "date": "2011-10-12",
+      "scenario": "genuine_shift",
+      "seed": 1494,
+      "severity": 0.63,
+      "positive": false,
+      "correct": true,
+      "proposed": false,
+      "restored": false,
+      "contracts": false,
+      "isolation_forest": true,
+      "robust_mad": true,
+      "hybrid": true,
+      "elapsed_ms": 21.03,
+      "roots": [
+        "source_shift"
+      ]
+    },
+    {
+      "date": "2011-10-12",
+      "scenario": "compound",
+      "seed": 1494,
+      "severity": 0.63,
+      "positive": true,
+      "correct": true,
+      "proposed": true,
+      "restored": true,
+      "contracts": true,
+      "isolation_forest": true,
+      "robust_mad": false,
+      "hybrid": true,
+      "elapsed_ms": 51.1,
+      "roots": [
+        "dimension_keys",
+        "ingestion_replay"
+      ]
+    },
+    {
+      "date": "2011-10-20",
+      "scenario": "clean",
+      "seed": 1591,
+      "severity": 0.12,
+      "positive": false,
+      "correct": true,
+      "proposed": false,
+      "restored": false,
+      "contracts": false,
+      "isolation_forest": false,
+      "robust_mad": false,
+      "hybrid": false,
+      "elapsed_ms": 20.96,
+      "roots": [
+        "healthy"
+      ]
+    },
+    {
+      "date": "2011-10-20",
+      "scenario": "duplicate_ingestion",
+      "seed": 1591,
+      "severity": 0.12,
+      "positive": true,
+      "correct": true,
+      "proposed": true,
+      "restored": true,
+      "contracts": true,
+      "isolation_forest": false,
+      "robust_mad": false,
+      "hybrid": true,
+      "elapsed_ms": 50.56,
+      "roots": [
+        "ingestion_replay"
+      ]
+    },
+    {
+      "date": "2011-10-20",
+      "scenario": "missing_partition",
+      "seed": 1591,
+      "severity": 0.12,
+      "positive": true,
+      "correct": true,
+      "proposed": true,
+      "restored": true,
+      "contracts": true,
+      "isolation_forest": false,
+      "robust_mad": false,
+      "hybrid": true,
+      "elapsed_ms": 52.07,
+      "roots": [
+        "incomplete_delivery"
+      ]
+    },
+    {
+      "date": "2011-10-20",
+      "scenario": "null_country",
+      "seed": 1591,
+      "severity": 0.12,
+      "positive": true,
+      "correct": true,
+      "proposed": true,
+      "restored": true,
+      "contracts": true,
+      "isolation_forest": false,
+      "robust_mad": false,
+      "hybrid": true,
+      "elapsed_ms": 53.53,
+      "roots": [
+        "field_mapping"
+      ]
+    },
+    {
+      "date": "2011-10-20",
+      "scenario": "unit_scale",
+      "seed": 1591,
+      "severity": 0.12,
+      "positive": true,
+      "correct": true,
+      "proposed": true,
+      "restored": true,
+      "contracts": true,
+      "isolation_forest": true,
+      "robust_mad": true,
+      "hybrid": true,
+      "elapsed_ms": 55.47,
+      "roots": [
+        "unit_conversion"
+      ]
+    },
+    {
+      "date": "2011-10-20",
+      "scenario": "join_fanout",
+      "seed": 1591,
+      "severity": 0.12,
+      "positive": true,
+      "correct": true,
+      "proposed": true,
+      "restored": true,
+      "contracts": true,
+      "isolation_forest": false,
+      "robust_mad": false,
+      "hybrid": true,
+      "elapsed_ms": 57.49,
+      "roots": [
+        "dimension_keys"
+      ]
+    },
+    {
+      "date": "2011-10-20",
+      "scenario": "wrong_filter",
+      "seed": 1591,
+      "severity": 0.12,
+      "positive": true,
+      "correct": true,
+      "proposed": true,
+      "restored": true,
+      "contracts": true,
+      "isolation_forest": false,
+      "robust_mad": false,
+      "hybrid": true,
+      "elapsed_ms": 48.02,
+      "roots": [
+        "transform_regression"
+      ]
+    },
+    {
+      "date": "2011-10-20",
+      "scenario": "schema_rename",
+      "seed": 1591,
+      "severity": 0.12,
+      "positive": true,
+      "correct": true,
+      "proposed": true,
+      "restored": true,
+      "contracts": true,
+      "isolation_forest": false,
+      "robust_mad": false,
+      "hybrid": true,
+      "elapsed_ms": 36.81,
+      "roots": [
+        "schema_contract"
+      ]
+    },
+    {
+      "date": "2011-10-20",
+      "scenario": "genuine_shift",
+      "seed": 1591,
+      "severity": 0.12,
+      "positive": false,
+      "correct": true,
+      "proposed": false,
+      "restored": false,
+      "contracts": false,
+      "isolation_forest": false,
+      "robust_mad": false,
+      "hybrid": false,
+      "elapsed_ms": 21.03,
+      "roots": [
+        "healthy"
+      ]
+    },
+    {
+      "date": "2011-10-20",
+      "scenario": "compound",
+      "seed": 1591,
+      "severity": 0.12,
+      "positive": true,
+      "correct": true,
+      "proposed": true,
+      "restored": true,
+      "contracts": true,
+      "isolation_forest": false,
+      "robust_mad": false,
+      "hybrid": true,
+      "elapsed_ms": 50.34,
+      "roots": [
+        "dimension_keys",
+        "ingestion_replay"
+      ]
+    },
+    {
+      "date": "2011-10-28",
+      "scenario": "clean",
+      "seed": 1688,
+      "severity": 0.37,
+      "positive": false,
+      "correct": true,
+      "proposed": false,
+      "restored": false,
+      "contracts": false,
+      "isolation_forest": false,
+      "robust_mad": false,
+      "hybrid": false,
+      "elapsed_ms": 20.45,
+      "roots": [
+        "healthy"
+      ]
+    },
+    {
+      "date": "2011-10-28",
+      "scenario": "duplicate_ingestion",
+      "seed": 1688,
+      "severity": 0.37,
+      "positive": true,
+      "correct": true,
+      "proposed": true,
+      "restored": true,
+      "contracts": true,
+      "isolation_forest": false,
+      "robust_mad": false,
+      "hybrid": true,
+      "elapsed_ms": 46.57,
+      "roots": [
+        "ingestion_replay"
+      ]
+    },
+    {
+      "date": "2011-10-28",
+      "scenario": "missing_partition",
+      "seed": 1688,
+      "severity": 0.37,
+      "positive": true,
+      "correct": true,
+      "proposed": true,
+      "restored": true,
+      "contracts": true,
+      "isolation_forest": false,
+      "robust_mad": false,
+      "hybrid": true,
+      "elapsed_ms": 48.65,
+      "roots": [
+        "incomplete_delivery"
+      ]
+    },
+    {
+      "date": "2011-10-28",
+      "scenario": "null_country",
+      "seed": 1688,
+      "severity": 0.37,
+      "positive": true,
+      "correct": true,
+      "proposed": true,
+      "restored": true,
+      "contracts": true,
+      "isolation_forest": false,
+      "robust_mad": false,
+      "hybrid": true,
+      "elapsed_ms": 45.34,
+      "roots": [
+        "field_mapping"
+      ]
+    },
+    {
+      "date": "2011-10-28",
+      "scenario": "unit_scale",
+      "seed": 1688,
+      "severity": 0.37,
+      "positive": true,
+      "correct": true,
+      "proposed": true,
+      "restored": true,
+      "contracts": true,
+      "isolation_forest": true,
+      "robust_mad": true,
+      "hybrid": true,
+      "elapsed_ms": 44.32,
+      "roots": [
+        "unit_conversion"
+      ]
+    },
+    {
+      "date": "2011-10-28",
+      "scenario": "join_fanout",
+      "seed": 1688,
+      "severity": 0.37,
+      "positive": true,
+      "correct": true,
+      "proposed": true,
+      "restored": true,
+      "contracts": true,
+      "isolation_forest": false,
+      "robust_mad": false,
+      "hybrid": true,
+      "elapsed_ms": 46.3,
+      "roots": [
+        "dimension_keys"
+      ]
+    },
+    {
+      "date": "2011-10-28",
+      "scenario": "wrong_filter",
+      "seed": 1688,
+      "severity": 0.37,
+      "positive": true,
+      "correct": true,
+      "proposed": true,
+      "restored": true,
+      "contracts": true,
+      "isolation_forest": false,
+      "robust_mad": false,
+      "hybrid": true,
+      "elapsed_ms": 45.05,
+      "roots": [
+        "transform_regression"
+      ]
+    },
+    {
+      "date": "2011-10-28",
+      "scenario": "schema_rename",
+      "seed": 1688,
+      "severity": 0.37,
+      "positive": true,
+      "correct": true,
+      "proposed": true,
+      "restored": true,
+      "contracts": true,
+      "isolation_forest": false,
+      "robust_mad": false,
+      "hybrid": true,
+      "elapsed_ms": 33.26,
+      "roots": [
+        "schema_contract"
+      ]
+    },
+    {
+      "date": "2011-10-28",
+      "scenario": "genuine_shift",
+      "seed": 1688,
+      "severity": 0.37,
+      "positive": false,
+      "correct": true,
+      "proposed": false,
+      "restored": false,
+      "contracts": false,
+      "isolation_forest": false,
+      "robust_mad": true,
+      "hybrid": false,
+      "elapsed_ms": 20.21,
+      "roots": [
+        "healthy"
+      ]
+    },
+    {
+      "date": "2011-10-28",
+      "scenario": "compound",
+      "seed": 1688,
+      "severity": 0.37,
+      "positive": true,
+      "correct": true,
+      "proposed": true,
+      "restored": true,
+      "contracts": true,
+      "isolation_forest": false,
+      "robust_mad": false,
+      "hybrid": true,
+      "elapsed_ms": 47.29,
+      "roots": [
+        "dimension_keys",
+        "ingestion_replay"
+      ]
+    },
+    {
+      "date": "2011-11-06",
+      "scenario": "clean",
+      "seed": 1785,
+      "severity": 0.63,
+      "positive": false,
+      "correct": true,
+      "proposed": false,
+      "restored": false,
+      "contracts": false,
+      "isolation_forest": false,
+      "robust_mad": false,
+      "hybrid": false,
+      "elapsed_ms": 25.08,
+      "roots": [
+        "healthy"
+      ]
+    },
+    {
+      "date": "2011-11-06",
+      "scenario": "duplicate_ingestion",
+      "seed": 1785,
+      "severity": 0.63,
+      "positive": true,
+      "correct": true,
+      "proposed": true,
+      "restored": true,
+      "contracts": true,
+      "isolation_forest": true,
+      "robust_mad": true,
+      "hybrid": true,
+      "elapsed_ms": 58.37,
+      "roots": [
+        "ingestion_replay"
+      ]
+    },
+    {
+      "date": "2011-11-06",
+      "scenario": "missing_partition",
+      "seed": 1785,
+      "severity": 0.63,
+      "positive": true,
+      "correct": true,
+      "proposed": true,
+      "restored": true,
+      "contracts": true,
+      "isolation_forest": false,
+      "robust_mad": false,
+      "hybrid": true,
+      "elapsed_ms": 53.4,
+      "roots": [
+        "incomplete_delivery"
+      ]
+    },
+    {
+      "date": "2011-11-06",
+      "scenario": "null_country",
+      "seed": 1785,
+      "severity": 0.63,
+      "positive": true,
+      "correct": true,
+      "proposed": true,
+      "restored": true,
+      "contracts": true,
+      "isolation_forest": false,
+      "robust_mad": false,
+      "hybrid": true,
+      "elapsed_ms": 54.78,
+      "roots": [
+        "field_mapping"
+      ]
+    },
+    {
+      "date": "2011-11-06",
+      "scenario": "unit_scale",
+      "seed": 1785,
+      "severity": 0.63,
+      "positive": true,
+      "correct": true,
+      "proposed": true,
+      "restored": true,
+      "contracts": true,
+      "isolation_forest": true,
+      "robust_mad": true,
+      "hybrid": true,
+      "elapsed_ms": 54.59,
+      "roots": [
+        "unit_conversion"
+      ]
+    },
+    {
+      "date": "2011-11-06",
+      "scenario": "join_fanout",
+      "seed": 1785,
+      "severity": 0.63,
+      "positive": true,
+      "correct": true,
+      "proposed": true,
+      "restored": true,
+      "contracts": true,
+      "isolation_forest": false,
+      "robust_mad": false,
+      "hybrid": true,
+      "elapsed_ms": 55.07,
+      "roots": [
+        "dimension_keys"
+      ]
+    },
+    {
+      "date": "2011-11-06",
+      "scenario": "wrong_filter",
+      "seed": 1785,
+      "severity": 0.63,
+      "positive": true,
+      "correct": true,
+      "proposed": true,
+      "restored": true,
+      "contracts": true,
+      "isolation_forest": false,
+      "robust_mad": false,
+      "hybrid": true,
+      "elapsed_ms": 53.63,
+      "roots": [
+        "transform_regression"
+      ]
+    },
+    {
+      "date": "2011-11-06",
+      "scenario": "schema_rename",
+      "seed": 1785,
+      "severity": 0.63,
+      "positive": true,
+      "correct": true,
+      "proposed": true,
+      "restored": true,
+      "contracts": true,
+      "isolation_forest": false,
+      "robust_mad": false,
+      "hybrid": true,
+      "elapsed_ms": 41.21,
+      "roots": [
+        "schema_contract"
+      ]
+    },
+    {
+      "date": "2011-11-06",
+      "scenario": "genuine_shift",
+      "seed": 1785,
+      "severity": 0.63,
+      "positive": false,
+      "correct": true,
+      "proposed": false,
+      "restored": false,
+      "contracts": false,
+      "isolation_forest": true,
+      "robust_mad": true,
+      "hybrid": true,
+      "elapsed_ms": 23.39,
+      "roots": [
+        "source_shift"
+      ]
+    },
+    {
+      "date": "2011-11-06",
+      "scenario": "compound",
+      "seed": 1785,
+      "severity": 0.63,
+      "positive": true,
+      "correct": true,
+      "proposed": true,
+      "restored": true,
+      "contracts": true,
+      "isolation_forest": true,
+      "robust_mad": true,
+      "hybrid": true,
+      "elapsed_ms": 59.76,
+      "roots": [
+        "dimension_keys",
+        "ingestion_replay"
+      ]
+    },
+    {
+      "date": "2011-11-14",
+      "scenario": "clean",
+      "seed": 1882,
+      "severity": 0.12,
+      "positive": false,
+      "correct": true,
+      "proposed": false,
+      "restored": false,
+      "contracts": false,
+      "isolation_forest": false,
+      "robust_mad": true,
+      "hybrid": false,
+      "elapsed_ms": 23.5,
+      "roots": [
+        "healthy"
+      ]
+    },
+    {
+      "date": "2011-11-14",
+      "scenario": "duplicate_ingestion",
+      "seed": 1882,
+      "severity": 0.12,
+      "positive": true,
+      "correct": true,
+      "proposed": true,
+      "restored": true,
+      "contracts": true,
+      "isolation_forest": false,
+      "robust_mad": true,
+      "hybrid": true,
+      "elapsed_ms": 57.37,
+      "roots": [
+        "ingestion_replay"
+      ]
+    },
+    {
+      "date": "2011-11-14",
+      "scenario": "missing_partition",
+      "seed": 1882,
+      "severity": 0.12,
+      "positive": true,
+      "correct": true,
+      "proposed": true,
+      "restored": true,
+      "contracts": true,
+      "isolation_forest": false,
+      "robust_mad": true,
+      "hybrid": true,
+      "elapsed_ms": 55.6,
+      "roots": [
+        "incomplete_delivery"
+      ]
+    },
+    {
+      "date": "2011-11-14",
+      "scenario": "null_country",
+      "seed": 1882,
+      "severity": 0.12,
+      "positive": true,
+      "correct": true,
+      "proposed": true,
+      "restored": true,
+      "contracts": true,
+      "isolation_forest": false,
+      "robust_mad": true,
+      "hybrid": true,
+      "elapsed_ms": 55.21,
+      "roots": [
+        "field_mapping"
+      ]
+    },
+    {
+      "date": "2011-11-14",
+      "scenario": "unit_scale",
+      "seed": 1882,
+      "severity": 0.12,
+      "positive": true,
+      "correct": true,
+      "proposed": true,
+      "restored": true,
+      "contracts": true,
+      "isolation_forest": true,
+      "robust_mad": true,
+      "hybrid": true,
+      "elapsed_ms": 54.96,
+      "roots": [
+        "unit_conversion"
+      ]
+    },
+    {
+      "date": "2011-11-14",
+      "scenario": "join_fanout",
+      "seed": 1882,
+      "severity": 0.12,
+      "positive": true,
+      "correct": true,
+      "proposed": true,
+      "restored": true,
+      "contracts": true,
+      "isolation_forest": false,
+      "robust_mad": true,
+      "hybrid": true,
+      "elapsed_ms": 55.47,
+      "roots": [
+        "dimension_keys"
+      ]
+    },
+    {
+      "date": "2011-11-14",
+      "scenario": "wrong_filter",
+      "seed": 1882,
+      "severity": 0.12,
+      "positive": true,
+      "correct": true,
+      "proposed": true,
+      "restored": true,
+      "contracts": true,
+      "isolation_forest": false,
+      "robust_mad": true,
+      "hybrid": true,
+      "elapsed_ms": 54.52,
+      "roots": [
+        "transform_regression"
+      ]
+    },
+    {
+      "date": "2011-11-14",
+      "scenario": "schema_rename",
+      "seed": 1882,
+      "severity": 0.12,
+      "positive": true,
+      "correct": true,
+      "proposed": true,
+      "restored": true,
+      "contracts": true,
+      "isolation_forest": false,
+      "robust_mad": false,
+      "hybrid": true,
+      "elapsed_ms": 43.72,
+      "roots": [
+        "schema_contract"
+      ]
+    },
+    {
+      "date": "2011-11-14",
+      "scenario": "genuine_shift",
+      "seed": 1882,
+      "severity": 0.12,
+      "positive": false,
+      "correct": true,
+      "proposed": false,
+      "restored": false,
+      "contracts": false,
+      "isolation_forest": true,
+      "robust_mad": true,
+      "hybrid": true,
+      "elapsed_ms": 23.34,
+      "roots": [
+        "source_shift"
+      ]
+    },
+    {
+      "date": "2011-11-14",
+      "scenario": "compound",
+      "seed": 1882,
+      "severity": 0.12,
+      "positive": true,
+      "correct": true,
+      "proposed": true,
+      "restored": true,
+      "contracts": true,
+      "isolation_forest": false,
+      "robust_mad": true,
+      "hybrid": true,
+      "elapsed_ms": 58.21,
+      "roots": [
+        "dimension_keys",
+        "ingestion_replay"
+      ]
+    },
+    {
+      "date": "2011-11-22",
+      "scenario": "clean",
+      "seed": 1979,
+      "severity": 0.37,
+      "positive": false,
+      "correct": true,
+      "proposed": false,
+      "restored": false,
+      "contracts": false,
+      "isolation_forest": false,
+      "robust_mad": false,
+      "hybrid": false,
+      "elapsed_ms": 24.27,
+      "roots": [
+        "healthy"
+      ]
+    },
+    {
+      "date": "2011-11-22",
+      "scenario": "duplicate_ingestion",
+      "seed": 1979,
+      "severity": 0.37,
+      "positive": true,
+      "correct": true,
+      "proposed": true,
+      "restored": true,
+      "contracts": true,
+      "isolation_forest": false,
+      "robust_mad": true,
+      "hybrid": true,
+      "elapsed_ms": 60.32,
+      "roots": [
+        "ingestion_replay"
+      ]
+    },
+    {
+      "date": "2011-11-22",
+      "scenario": "missing_partition",
+      "seed": 1979,
+      "severity": 0.37,
+      "positive": true,
+      "correct": true,
+      "proposed": true,
+      "restored": true,
+      "contracts": true,
+      "isolation_forest": false,
+      "robust_mad": false,
+      "hybrid": true,
+      "elapsed_ms": 55.23,
+      "roots": [
+        "incomplete_delivery"
+      ]
+    },
+    {
+      "date": "2011-11-22",
+      "scenario": "null_country",
+      "seed": 1979,
+      "severity": 0.37,
+      "positive": true,
+      "correct": true,
+      "proposed": true,
+      "restored": true,
+      "contracts": true,
+      "isolation_forest": false,
+      "robust_mad": false,
+      "hybrid": true,
+      "elapsed_ms": 56.86,
+      "roots": [
+        "field_mapping"
+      ]
+    },
+    {
+      "date": "2011-11-22",
+      "scenario": "unit_scale",
+      "seed": 1979,
+      "severity": 0.37,
+      "positive": true,
+      "correct": true,
+      "proposed": true,
+      "restored": true,
+      "contracts": true,
+      "isolation_forest": true,
+      "robust_mad": true,
+      "hybrid": true,
+      "elapsed_ms": 60.53,
+      "roots": [
+        "unit_conversion"
+      ]
+    },
+    {
+      "date": "2011-11-22",
+      "scenario": "join_fanout",
+      "seed": 1979,
+      "severity": 0.37,
+      "positive": true,
+      "correct": true,
+      "proposed": true,
+      "restored": true,
+      "contracts": true,
+      "isolation_forest": false,
+      "robust_mad": false,
+      "hybrid": true,
+      "elapsed_ms": 71.79,
+      "roots": [
+        "dimension_keys"
+      ]
+    },
+    {
+      "date": "2011-11-22",
+      "scenario": "wrong_filter",
+      "seed": 1979,
+      "severity": 0.37,
+      "positive": true,
+      "correct": true,
+      "proposed": true,
+      "restored": true,
+      "contracts": true,
+      "isolation_forest": false,
+      "robust_mad": false,
+      "hybrid": true,
+      "elapsed_ms": 57.51,
+      "roots": [
+        "transform_regression"
+      ]
+    },
+    {
+      "date": "2011-11-22",
+      "scenario": "schema_rename",
+      "seed": 1979,
+      "severity": 0.37,
+      "positive": true,
+      "correct": true,
+      "proposed": true,
+      "restored": true,
+      "contracts": true,
+      "isolation_forest": false,
+      "robust_mad": false,
+      "hybrid": true,
+      "elapsed_ms": 43.76,
+      "roots": [
+        "schema_contract"
+      ]
+    },
+    {
+      "date": "2011-11-22",
+      "scenario": "genuine_shift",
+      "seed": 1979,
+      "severity": 0.37,
+      "positive": false,
+      "correct": true,
+      "proposed": false,
+      "restored": false,
+      "contracts": false,
+      "isolation_forest": true,
+      "robust_mad": true,
+      "hybrid": true,
+      "elapsed_ms": 24.14,
+      "roots": [
+        "source_shift"
+      ]
+    },
+    {
+      "date": "2011-11-22",
+      "scenario": "compound",
+      "seed": 1979,
+      "severity": 0.37,
+      "positive": true,
+      "correct": true,
+      "proposed": true,
+      "restored": true,
+      "contracts": true,
+      "isolation_forest": false,
+      "robust_mad": true,
+      "hybrid": true,
+      "elapsed_ms": 60.95,
+      "roots": [
+        "dimension_keys",
+        "ingestion_replay"
+      ]
+    },
+    {
+      "date": "2011-11-30",
+      "scenario": "clean",
+      "seed": 2076,
+      "severity": 0.63,
+      "positive": false,
+      "correct": true,
+      "proposed": false,
+      "restored": false,
+      "contracts": false,
+      "isolation_forest": false,
+      "robust_mad": false,
+      "hybrid": false,
+      "elapsed_ms": 23.43,
+      "roots": [
+        "healthy"
+      ]
+    },
+    {
+      "date": "2011-11-30",
+      "scenario": "duplicate_ingestion",
+      "seed": 2076,
+      "severity": 0.63,
+      "positive": true,
+      "correct": true,
+      "proposed": true,
+      "restored": true,
+      "contracts": true,
+      "isolation_forest": false,
+      "robust_mad": true,
+      "hybrid": true,
+      "elapsed_ms": 58.36,
+      "roots": [
+        "ingestion_replay"
+      ]
+    },
+    {
+      "date": "2011-11-30",
+      "scenario": "missing_partition",
+      "seed": 2076,
+      "severity": 0.63,
+      "positive": true,
+      "correct": true,
+      "proposed": true,
+      "restored": true,
+      "contracts": true,
+      "isolation_forest": false,
+      "robust_mad": false,
+      "hybrid": true,
+      "elapsed_ms": 51.82,
+      "roots": [
+        "incomplete_delivery"
+      ]
+    },
+    {
+      "date": "2011-11-30",
+      "scenario": "null_country",
+      "seed": 2076,
+      "severity": 0.63,
+      "positive": true,
+      "correct": true,
+      "proposed": true,
+      "restored": true,
+      "contracts": true,
+      "isolation_forest": false,
+      "robust_mad": false,
+      "hybrid": true,
+      "elapsed_ms": 54.22,
+      "roots": [
+        "field_mapping"
+      ]
+    },
+    {
+      "date": "2011-11-30",
+      "scenario": "unit_scale",
+      "seed": 2076,
+      "severity": 0.63,
+      "positive": true,
+      "correct": true,
+      "proposed": true,
+      "restored": true,
+      "contracts": true,
+      "isolation_forest": true,
+      "robust_mad": true,
+      "hybrid": true,
+      "elapsed_ms": 54.72,
+      "roots": [
+        "unit_conversion"
+      ]
+    },
+    {
+      "date": "2011-11-30",
+      "scenario": "join_fanout",
+      "seed": 2076,
+      "severity": 0.63,
+      "positive": true,
+      "correct": true,
+      "proposed": true,
+      "restored": true,
+      "contracts": true,
+      "isolation_forest": false,
+      "robust_mad": false,
+      "hybrid": true,
+      "elapsed_ms": 54.83,
+      "roots": [
+        "dimension_keys"
+      ]
+    },
+    {
+      "date": "2011-11-30",
+      "scenario": "wrong_filter",
+      "seed": 2076,
+      "severity": 0.63,
+      "positive": true,
+      "correct": true,
+      "proposed": true,
+      "restored": true,
+      "contracts": true,
+      "isolation_forest": false,
+      "robust_mad": false,
+      "hybrid": true,
+      "elapsed_ms": 53.14,
+      "roots": [
+        "transform_regression"
+      ]
+    },
+    {
+      "date": "2011-11-30",
+      "scenario": "schema_rename",
+      "seed": 2076,
+      "severity": 0.63,
+      "positive": true,
+      "correct": true,
+      "proposed": true,
+      "restored": true,
+      "contracts": true,
+      "isolation_forest": false,
+      "robust_mad": false,
+      "hybrid": true,
+      "elapsed_ms": 41.19,
+      "roots": [
+        "schema_contract"
+      ]
+    },
+    {
+      "date": "2011-11-30",
+      "scenario": "genuine_shift",
+      "seed": 2076,
+      "severity": 0.63,
+      "positive": false,
+      "correct": true,
+      "proposed": false,
+      "restored": false,
+      "contracts": false,
+      "isolation_forest": true,
+      "robust_mad": true,
+      "hybrid": true,
+      "elapsed_ms": 23.05,
+      "roots": [
+        "source_shift"
+      ]
+    },
+    {
+      "date": "2011-11-30",
+      "scenario": "compound",
+      "seed": 2076,
+      "severity": 0.63,
+      "positive": true,
+      "correct": true,
+      "proposed": true,
+      "restored": true,
+      "contracts": true,
+      "isolation_forest": false,
+      "robust_mad": true,
+      "hybrid": true,
+      "elapsed_ms": 58.84,
+      "roots": [
+        "dimension_keys",
+        "ingestion_replay"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,841 @@
+[
+  {
+    "scenario": "join_fanout",
+    "status": "needs_review",
+    "alert": {
+      "checks": [
+        {
+          "name": "Required schema",
+          "passed": true,
+          "observed": "All columns present",
+          "expected": "10 canonical columns",
+          "node": "raw_batch"
+        },
+        {
+          "name": "Source-row uniqueness",
+          "passed": true,
+          "observed": 0,
+          "expected": 0,
+          "node": "raw_batch"
+        },
+        {
+          "name": "Delivery completeness",
+          "passed": true,
+          "observed": 2447,
+          "expected": 2447,
+          "node": "raw_batch"
+        },
+        {
+          "name": "Source value fidelity",
+          "passed": true,
+          "observed": "Exact match",
+          "expected": "Unchanged source values",
+          "node": "raw_batch"
+        },
+        {
+          "name": "Dimension key uniqueness",
+          "passed": false,
+          "observed": 336,
+          "expected": 0,
+          "node": "dim_products"
+        },
+        {
+          "name": "Transformation execution",
+          "passed": true,
+          "observed": "Succeeded",
+          "expected": "Succeeded",
+          "node": "fact_sales"
+        },
+        {
+          "name": "Fact row conservation",
+          "passed": false,
+          "observed": 3183,
+          "expected": 2447,
+          "node": "fact_sales"
+        },
+        {
+          "name": "Fact key uniqueness",
+          "passed": false,
+          "observed": 736,
+          "expected": 0,
+          "node": "fact_sales"
+        }
+      ],
+      "statistical": {
+        "available": true,
+        "novelty_score": 0.49309,
+        "calibration_tail_fraction": 0.25926,
+        "alert": false,
+        "robust_alert": false,
+        "robust_scores": {
+          "rows": 2.134,
+          "revenue_abs": 4.323,
+          "mean_price": 0.816,
+          "mean_abs_quantity": 2.595,
+          "null_customer_rate": 0.674,
+          "return_rate": 0.346
+        },
+        "features": {
+          "rows": 2447.0,
+          "revenue_abs": 75942.83,
+          "mean_price": 3.1083,
+          "mean_abs_quantity": 19.009,
+          "null_customer_rate": 0.0952,
+          "return_rate": 0.0237
+        },
+        "train_batches": 193,
+        "calibration_batches": 26,
+        "note": "Distribution alert is not proof of corruption. Calibration is descriptive, not a clinical or probabilistic guarantee."
+      },
+      "failed_checks": 3,
+      "before": {
+        "rows": 3183,
+        "revenue": 99330.93,
+        "unique_ids": 2447
+      },
+      "execution_error": null
+    },
+    "investigation": {
+      "mode": "ollama",
+      "engine": "LangGraph",
+      "policy": "Live Ollama LLM",
+      "diagnosis": {
+        "tool": "finish",
+        "rationale": "Based on the evidence, the primary issues identified are related to dimension key uniqueness (336 duplicate keys) and fact row conservation (3183 observed fact rows instead of 2447 expected). The transformation and delivery processes appear to be healthy, with no changes in SQL or schema. The statistical analysis does not provide evidence of corruption, and the source values in the raw_batch table are exact matches to the source. Therefore, the root cause is likely related to the dimension keys.",
+        "roots": [
+          "dimension_keys"
+        ],
+        "repairs": [
+          "deduplicate_dimension"
+        ],
+        "summary": "Identical repeated dimension keys multiply fact rows during the join."
+      },
+      "model_draft": {
+        "tool": "finish",
+        "rationale": "Based on the evidence, the primary issues identified are related to dimension key uniqueness (336 duplicate keys) and fact row conservation (3183 observed fact rows instead of 2447 expected). The transformation and delivery processes appear to be healthy, with no changes in SQL or schema. The statistical analysis does not provide evidence of corruption, and the source values in the raw_batch table are exact matches to the source. Therefore, the root cause is likely related to the dimension keys.",
+        "roots": [
+          "dimension_keys"
+        ],
+        "repairs": [
+          "deduplicate_dimension"
+        ],
+        "summary": "The dimension table dim_products contains 336 duplicate keys, which is causing the fact_sales table to have 736 unique IDs instead of the expected 2447. Deduplicating the dimension table should resolve this issue."
+      },
+      "evidence": {
+        "inspect_dimension": {
+          "rows": 1457,
+          "unique_keys": 1121,
+          "duplicate_keys": 336,
+          "conflicting_keys": 0
+        },
+        "inspect_delivery": {
+          "landing_rows": 2447,
+          "ingested_rows": 2447,
+          "duplicate_source_ids": 0,
+          "missing_source_ids": 0,
+          "unexpected_source_ids": 0,
+          "missing_columns": [],
+          "extra_columns": [],
+          "changed_fields": {},
+          "source_authority": "Immutable landing delivery, not an evaluator answer"
+        },
+        "inspect_transform": {
+          "executed_sql": "SELECT r.source_row_id, r.invoice_no, r.stock_code, r.invoice_date,\n       r.quantity, r.unit_price, r.customer_id, r.country,\n       d.product_description,\n       CAST(ROUND(r.quantity * r.unit_price, 2) AS DECIMAL(18,2)) AS revenue\nFROM raw_batch r\nLEFT JOIN dim_products d ON r.stock_code = d.stock_code",
+          "approved_sql": "SELECT r.source_row_id, r.invoice_no, r.stock_code, r.invoice_date,\n       r.quantity, r.unit_price, r.customer_id, r.country,\n       d.product_description,\n       CAST(ROUND(r.quantity * r.unit_price, 2) AS DECIMAL(18,2)) AS revenue\nFROM raw_batch r\nLEFT JOIN dim_products d ON r.stock_code = d.stock_code",
+          "changed": false,
+          "contract": "Preserve each source row once, including returns and missing customer IDs."
+        }
+      },
+      "trace": [
+        {
+          "step": 1,
+          "kind": "decision",
+          "tool": "inspect_dimension",
+          "rationale": "The 'dimension key uniqueness' check failed, indicating duplicate product keys in the 'dim_products' table. This needs investigation to determine if these are legitimate duplicates or if there is a data corruption issue.",
+          "elapsed_ms": 27224.01
+        },
+        {
+          "step": 1,
+          "kind": "tool",
+          "tool": "inspect_dimension",
+          "result": {
+            "rows": 1457,
+            "unique_keys": 1121,
+            "duplicate_keys": 336,
+            "conflicting_keys": 0
+          }
+        },
+        {
+          "step": 2,
+          "kind": "decision",
+          "tool": "inspect_delivery",
+          "rationale": "First, we need to confirm if the delivery completeness and schema match the expected state. This will help us understand if the issue lies with the delivery process or the transformation logic.",
+          "elapsed_ms": 7813.58
+        },
+        {
+          "step": 2,
+          "kind": "tool",
+          "tool": "inspect_delivery",
+          "result": {
+            "landing_rows": 2447,
+            "ingested_rows": 2447,
+            "duplicate_source_ids": 0,
+            "missing_source_ids": 0,
+            "unexpected_source_ids": 0,
+            "missing_columns": [],
+            "extra_columns": [],
+            "changed_fields": {},
+            "source_authority": "Immutable landing delivery, not an evaluator answer"
+          }
+        },
+        {
+          "step": 3,
+          "kind": "decision",
+          "tool": "inspect_transform",
+          "rationale": "Given that the fact table `fact_sales` has 3183 rows, which is more than the expected 2447 rows, and considering the `inspect_delivery` shows no issues with the raw data, the problem likely lies in the transformation step. We need to review the transformation SQL to identify any potential issues, such as incorrect joins, aggregations, or other logic errors that might have led to the extra rows.",
+          "elapsed_ms": 9974.54
+        },
+        {
+          "step": 3,
+          "kind": "tool",
+          "tool": "inspect_transform",
+          "result": {
+            "executed_sql": "SELECT r.source_row_id, r.invoice_no, r.stock_code, r.invoice_date,\n       r.quantity, r.unit_price, r.customer_id, r.country,\n       d.product_description,\n       CAST(ROUND(r.quantity * r.unit_price, 2) AS DECIMAL(18,2)) AS revenue\nFROM raw_batch r\nLEFT JOIN dim_products d ON r.stock_code = d.stock_code",
+            "approved_sql": "SELECT r.source_row_id, r.invoice_no, r.stock_code, r.invoice_date,\n       r.quantity, r.unit_price, r.customer_id, r.country,\n       d.product_description,\n       CAST(ROUND(r.quantity * r.unit_price, 2) AS DECIMAL(18,2)) AS revenue\nFROM raw_batch r\nLEFT JOIN dim_products d ON r.stock_code = d.stock_code",
+            "changed": false,
+            "contract": "Preserve each source row once, including returns and missing customer IDs."
+          }
+        },
+        {
+          "step": 4,
+          "kind": "decision",
+          "tool": "finish",
+          "rationale": "Based on the evidence, the primary issues identified are related to dimension key uniqueness (336 duplicate keys) and fact row conservation (3183 observed fact rows instead of 2447 expected). The transformation and delivery processes appear to be healthy, with no changes in SQL or schema. The statistical analysis does not provide evidence of corruption, and the source values in the raw_batch table are exact matches to the source. Therefore, the root cause is likely related to the dimension keys.",
+          "elapsed_ms": 17015.65
+        }
+      ]
+    },
+    "patches": [
+      {
+        "action": "deduplicate_dimension",
+        "label": "Remove exact repeated dimension records",
+        "sql": "SELECT DISTINCT stock_code, product_description FROM dim_products",
+        "reason": "Only identical duplicates are removed. Conflicting values require human investigation."
+      }
+    ],
+    "verification": {
+      "passed": true,
+      "checks": [
+        {
+          "name": "Required schema",
+          "passed": true,
+          "observed": "All columns present",
+          "expected": "10 canonical columns",
+          "node": "raw_batch"
+        },
+        {
+          "name": "Source-row uniqueness",
+          "passed": true,
+          "observed": 0,
+          "expected": 0,
+          "node": "raw_batch"
+        },
+        {
+          "name": "Delivery completeness",
+          "passed": true,
+          "observed": 2447,
+          "expected": 2447,
+          "node": "raw_batch"
+        },
+        {
+          "name": "Source value fidelity",
+          "passed": true,
+          "observed": "Exact match",
+          "expected": "Unchanged source values",
+          "node": "raw_batch"
+        },
+        {
+          "name": "Dimension key uniqueness",
+          "passed": true,
+          "observed": 0,
+          "expected": 0,
+          "node": "dim_products"
+        },
+        {
+          "name": "Transformation execution",
+          "passed": true,
+          "observed": "Succeeded",
+          "expected": "Succeeded",
+          "node": "fact_sales"
+        },
+        {
+          "name": "Fact row conservation",
+          "passed": true,
+          "observed": 2447,
+          "expected": 2447,
+          "node": "fact_sales"
+        },
+        {
+          "name": "Fact key uniqueness",
+          "passed": true,
+          "observed": 0,
+          "expected": 0,
+          "node": "fact_sales"
+        }
+      ],
+      "error": null,
+      "exact_output_match": true
+    },
+    "before": {
+      "rows": 3183,
+      "revenue": 99330.93,
+      "unique_ids": 2447
+    },
+    "after": {
+      "rows": 2447,
+      "revenue": 75244.43,
+      "unique_ids": 2447
+    },
+    "elapsed_ms": 62467.61
+  },
+  {
+    "scenario": "compound",
+    "status": "needs_review",
+    "alert": {
+      "checks": [
+        {
+          "name": "Required schema",
+          "passed": true,
+          "observed": "All columns present",
+          "expected": "10 canonical columns",
+          "node": "raw_batch"
+        },
+        {
+          "name": "Source-row uniqueness",
+          "passed": false,
+          "observed": 734,
+          "expected": 0,
+          "node": "raw_batch"
+        },
+        {
+          "name": "Delivery completeness",
+          "passed": true,
+          "observed": 2447,
+          "expected": 2447,
+          "node": "raw_batch"
+        },
+        {
+          "name": "Source value fidelity",
+          "passed": true,
+          "observed": "Exact match",
+          "expected": "Unchanged source values",
+          "node": "raw_batch"
+        },
+        {
+          "name": "Dimension key uniqueness",
+          "passed": false,
+          "observed": 336,
+          "expected": 0,
+          "node": "dim_products"
+        },
+        {
+          "name": "Transformation execution",
+          "passed": true,
+          "observed": "Succeeded",
+          "expected": "Succeeded",
+          "node": "fact_sales"
+        },
+        {
+          "name": "Fact row conservation",
+          "passed": false,
+          "observed": 4139,
+          "expected": 3181,
+          "node": "fact_sales"
+        },
+        {
+          "name": "Fact key uniqueness",
+          "passed": false,
+          "observed": 1692,
+          "expected": 0,
+          "node": "fact_sales"
+        }
+      ],
+      "statistical": {
+        "available": true,
+        "novelty_score": 0.53177,
+        "calibration_tail_fraction": 0.11111,
+        "alert": false,
+        "robust_alert": true,
+        "robust_scores": {
+          "rows": 3.701,
+          "revenue_abs": 6.368,
+          "mean_price": 0.876,
+          "mean_abs_quantity": 2.481,
+          "null_customer_rate": 0.68,
+          "return_rate": 0.337
+        },
+        "features": {
+          "rows": 3181.0,
+          "revenue_abs": 99098.86,
+          "mean_price": 3.0511,
+          "mean_abs_quantity": 18.6036,
+          "null_customer_rate": 0.094,
+          "return_rate": 0.0236
+        },
+        "train_batches": 193,
+        "calibration_batches": 26,
+        "note": "Distribution alert is not proof of corruption. Calibration is descriptive, not a clinical or probabilistic guarantee."
+      },
+      "failed_checks": 4,
+      "before": {
+        "rows": 4139,
+        "revenue": 130665.37,
+        "unique_ids": 2447
+      },
+      "execution_error": null
+    },
+    "investigation": {
+      "mode": "ollama",
+      "engine": "LangGraph",
+      "policy": "Live Ollama LLM",
+      "diagnosis": {
+        "tool": "finish",
+        "rationale": "Based on the evidence, the root causes identified are 'ingestion_replay' and 'dimension_keys'. The 'inspect_delivery' shows 734 duplicate source IDs, which aligns with the 'Source-row uniqueness' failed check. The 'inspect_dimension' reveals 336 duplicate keys in the 'dim_products' table, matching the 'Dimension key uniqueness' failed check. No changes in the SQL transformation are observed, and the fact table row count discrepancy is due to the duplicate source IDs and duplicate dimension keys.",
+        "roots": [
+          "ingestion_replay",
+          "dimension_keys"
+        ],
+        "repairs": [
+          "deduplicate_ingestion",
+          "deduplicate_dimension"
+        ],
+        "summary": "Repeated provenance IDs indicate an ingestion retry, not distinct purchases. Identical repeated dimension keys multiply fact rows during the join."
+      },
+      "model_draft": {
+        "tool": "finish",
+        "rationale": "Based on the evidence, the root causes identified are 'ingestion_replay' and 'dimension_keys'. The 'inspect_delivery' shows 734 duplicate source IDs, which aligns with the 'Source-row uniqueness' failed check. The 'inspect_dimension' reveals 336 duplicate keys in the 'dim_products' table, matching the 'Dimension key uniqueness' failed check. No changes in the SQL transformation are observed, and the fact table row count discrepancy is due to the duplicate source IDs and duplicate dimension keys.",
+        "roots": [
+          "ingestion_replay",
+          "dimension_keys"
+        ],
+        "repairs": [
+          "deduplicate_ingestion",
+          "deduplicate_dimension"
+        ],
+        "summary": "The data corruption is due to duplicate source IDs and duplicate product keys. Deduplication of the raw batch and dimension table is necessary to restore data integrity."
+      },
+      "evidence": {
+        "inspect_delivery": {
+          "landing_rows": 2447,
+          "ingested_rows": 3181,
+          "duplicate_source_ids": 734,
+          "missing_source_ids": 0,
+          "unexpected_source_ids": 0,
+          "missing_columns": [],
+          "extra_columns": [],
+          "changed_fields": {},
+          "source_authority": "Immutable landing delivery, not an evaluator answer"
+        },
+        "inspect_dimension": {
+          "rows": 1457,
+          "unique_keys": 1121,
+          "duplicate_keys": 336,
+          "conflicting_keys": 0
+        },
+        "inspect_transform": {
+          "executed_sql": "SELECT r.source_row_id, r.invoice_no, r.stock_code, r.invoice_date,\n       r.quantity, r.unit_price, r.customer_id, r.country,\n       d.product_description,\n       CAST(ROUND(r.quantity * r.unit_price, 2) AS DECIMAL(18,2)) AS revenue\nFROM raw_batch r\nLEFT JOIN dim_products d ON r.stock_code = d.stock_code",
+          "approved_sql": "SELECT r.source_row_id, r.invoice_no, r.stock_code, r.invoice_date,\n       r.quantity, r.unit_price, r.customer_id, r.country,\n       d.product_description,\n       CAST(ROUND(r.quantity * r.unit_price, 2) AS DECIMAL(18,2)) AS revenue\nFROM raw_batch r\nLEFT JOIN dim_products d ON r.stock_code = d.stock_code",
+          "changed": false,
+          "contract": "Preserve each source row once, including returns and missing customer IDs."
+        }
+      },
+      "trace": [
+        {
+          "step": 1,
+          "kind": "decision",
+          "tool": "inspect_delivery",
+          "rationale": "Given that the 'Source-row uniqueness' check failed for the 'raw_batch' node, we need to confirm if the delivery completeness is affected. This will help us understand if the duplicate source rows are part of the delivery or if they are from the source itself.",
+          "elapsed_ms": 11619.11
+        },
+        {
+          "step": 1,
+          "kind": "tool",
+          "tool": "inspect_delivery",
+          "result": {
+            "landing_rows": 2447,
+            "ingested_rows": 3181,
+            "duplicate_source_ids": 734,
+            "missing_source_ids": 0,
+            "unexpected_source_ids": 0,
+            "missing_columns": [],
+            "extra_columns": [],
+            "changed_fields": {},
+            "source_authority": "Immutable landing delivery, not an evaluator answer"
+          }
+        },
+        {
+          "step": 2,
+          "kind": "decision",
+          "tool": "inspect_dimension",
+          "rationale": "Given the failed 'dimension key uniqueness' check, we need to investigate if there are duplicate product keys in the 'dim_products' table. This could indicate that the same product is being represented multiple times, which might be causing issues in the fact table 'fact_sales'.",
+          "elapsed_ms": 7053.16
+        },
+        {
+          "step": 2,
+          "kind": "tool",
+          "tool": "inspect_dimension",
+          "result": {
+            "rows": 1457,
+            "unique_keys": 1121,
+            "duplicate_keys": 336,
+            "conflicting_keys": 0
+          }
+        },
+        {
+          "step": 3,
+          "kind": "decision",
+          "tool": "inspect_transform",
+          "rationale": "The fact table has an increased row count and duplicate product keys, suggesting potential issues with the transformation step. We need to review the executed SQL to understand if the transformation logic has changed or if there are any errors in the data processing pipeline.",
+          "elapsed_ms": 7567.94
+        },
+        {
+          "step": 3,
+          "kind": "tool",
+          "tool": "inspect_transform",
+          "result": {
+            "executed_sql": "SELECT r.source_row_id, r.invoice_no, r.stock_code, r.invoice_date,\n       r.quantity, r.unit_price, r.customer_id, r.country,\n       d.product_description,\n       CAST(ROUND(r.quantity * r.unit_price, 2) AS DECIMAL(18,2)) AS revenue\nFROM raw_batch r\nLEFT JOIN dim_products d ON r.stock_code = d.stock_code",
+            "approved_sql": "SELECT r.source_row_id, r.invoice_no, r.stock_code, r.invoice_date,\n       r.quantity, r.unit_price, r.customer_id, r.country,\n       d.product_description,\n       CAST(ROUND(r.quantity * r.unit_price, 2) AS DECIMAL(18,2)) AS revenue\nFROM raw_batch r\nLEFT JOIN dim_products d ON r.stock_code = d.stock_code",
+            "changed": false,
+            "contract": "Preserve each source row once, including returns and missing customer IDs."
+          }
+        },
+        {
+          "step": 4,
+          "kind": "decision",
+          "tool": "finish",
+          "rationale": "Based on the evidence, the root causes identified are 'ingestion_replay' and 'dimension_keys'. The 'inspect_delivery' shows 734 duplicate source IDs, which aligns with the 'Source-row uniqueness' failed check. The 'inspect_dimension' reveals 336 duplicate keys in the 'dim_products' table, matching the 'Dimension key uniqueness' failed check. No changes in the SQL transformation are observed, and the fact table row count discrepancy is due to the duplicate source IDs and duplicate dimension keys.",
+          "elapsed_ms": 17805.59
+        }
+      ]
+    },
+    "patches": [
+      {
+        "action": "deduplicate_ingestion",
+        "label": "Deduplicate retry records by source-row identity",
+        "sql": "SELECT * FROM raw_batch QUALIFY ROW_NUMBER() OVER (PARTITION BY source_row_id ORDER BY source_row_id) = 1",
+        "reason": "Preserves distinct source rows, including legitimate identical business transactions."
+      },
+      {
+        "action": "deduplicate_dimension",
+        "label": "Remove exact repeated dimension records",
+        "sql": "SELECT DISTINCT stock_code, product_description FROM dim_products",
+        "reason": "Only identical duplicates are removed. Conflicting values require human investigation."
+      }
+    ],
+    "verification": {
+      "passed": true,
+      "checks": [
+        {
+          "name": "Required schema",
+          "passed": true,
+          "observed": "All columns present",
+          "expected": "10 canonical columns",
+          "node": "raw_batch"
+        },
+        {
+          "name": "Source-row uniqueness",
+          "passed": true,
+          "observed": 0,
+          "expected": 0,
+          "node": "raw_batch"
+        },
+        {
+          "name": "Delivery completeness",
+          "passed": true,
+          "observed": 2447,
+          "expected": 2447,
+          "node": "raw_batch"
+        },
+        {
+          "name": "Source value fidelity",
+          "passed": true,
+          "observed": "Exact match",
+          "expected": "Unchanged source values",
+          "node": "raw_batch"
+        },
+        {
+          "name": "Dimension key uniqueness",
+          "passed": true,
+          "observed": 0,
+          "expected": 0,
+          "node": "dim_products"
+        },
+        {
+          "name": "Transformation execution",
+          "passed": true,
+          "observed": "Succeeded",
+          "expected": "Succeeded",
+          "node": "fact_sales"
+        },
+        {
+          "name": "Fact row conservation",
+          "passed": true,
+          "observed": 2447,
+          "expected": 2447,
+          "node": "fact_sales"
+        },
+        {
+          "name": "Fact key uniqueness",
+          "passed": true,
+          "observed": 0,
+          "expected": 0,
+          "node": "fact_sales"
+        }
+      ],
+      "error": null,
+      "exact_output_match": true
+    },
+    "before": {
+      "rows": 4139,
+      "revenue": 130665.37,
+      "unique_ids": 2447
+    },
+    "after": {
+      "rows": 2447,
+      "revenue": 75244.43,
+      "unique_ids": 2447
+    },
+    "elapsed_ms": 44190.51
+  },
+  {
+    "scenario": "genuine_shift",
+    "status": "no_action",
+    "alert": {
+      "checks": [
+        {
+          "name": "Required schema",
+          "passed": true,
+          "observed": "All columns present",
+          "expected": "10 canonical columns",
+          "node": "raw_batch"
+        },
+        {
+          "name": "Source-row uniqueness",
+          "passed": true,
+          "observed": 0,
+          "expected": 0,
+          "node": "raw_batch"
+        },
+        {
+          "name": "Delivery completeness",
+          "passed": true,
+          "observed": 2447,
+          "expected": 2447,
+          "node": "raw_batch"
+        },
+        {
+          "name": "Source value fidelity",
+          "passed": true,
+          "observed": "Exact match",
+          "expected": "Unchanged source values",
+          "node": "raw_batch"
+        },
+        {
+          "name": "Dimension key uniqueness",
+          "passed": true,
+          "observed": 0,
+          "expected": 0,
+          "node": "dim_products"
+        },
+        {
+          "name": "Transformation execution",
+          "passed": true,
+          "observed": "Succeeded",
+          "expected": "Succeeded",
+          "node": "fact_sales"
+        },
+        {
+          "name": "Fact row conservation",
+          "passed": true,
+          "observed": 2447,
+          "expected": 2447,
+          "node": "fact_sales"
+        },
+        {
+          "name": "Fact key uniqueness",
+          "passed": true,
+          "observed": 0,
+          "expected": 0,
+          "node": "fact_sales"
+        }
+      ],
+      "statistical": {
+        "available": true,
+        "novelty_score": 0.58248,
+        "calibration_tail_fraction": 0.03704,
+        "alert": true,
+        "robust_alert": true,
+        "robust_scores": {
+          "rows": 2.134,
+          "revenue_abs": 10.458,
+          "mean_price": 0.816,
+          "mean_abs_quantity": 6.949,
+          "null_customer_rate": 0.674,
+          "return_rate": 0.346
+        },
+        "features": {
+          "rows": 2447.0,
+          "revenue_abs": 145410.92,
+          "mean_price": 3.1083,
+          "mean_abs_quantity": 34.5337,
+          "null_customer_rate": 0.0952,
+          "return_rate": 0.0237
+        },
+        "train_batches": 193,
+        "calibration_batches": 26,
+        "note": "Distribution alert is not proof of corruption. Calibration is descriptive, not a clinical or probabilistic guarantee."
+      },
+      "failed_checks": 0,
+      "before": {
+        "rows": 2447,
+        "revenue": 144300.8,
+        "unique_ids": 2447
+      },
+      "execution_error": null
+    },
+    "investigation": {
+      "mode": "ollama",
+      "engine": "LangGraph",
+      "policy": "Live Ollama LLM",
+      "diagnosis": {
+        "tool": "finish",
+        "rationale": "Based on the evidence provided, all checks have passed, and there are no indications of corruption. The schema is correct, source rows are unique, the delivery is complete, and the transformation is as expected. The statistical analysis, while showing some distributional changes, does not provide evidence of corruption. The fact that the transformation SQL is unchanged and the distributional changes are within expected bounds (as indicated by the novelty score and calibration scores) suggests that the changes are likely due to natural variation in the data rather than corruption.",
+        "roots": [
+          "source_shift"
+        ],
+        "repairs": [],
+        "summary": "The batch is statistically unusual, but ingestion, keys, and SQL match their contracts. Investigate business context; do not rewrite valid source data."
+      },
+      "model_draft": {
+        "tool": "finish",
+        "rationale": "Based on the evidence provided, all checks have passed, and there are no indications of corruption. The schema is correct, source rows are unique, the delivery is complete, and the transformation is as expected. The statistical analysis, while showing some distributional changes, does not provide evidence of corruption. The fact that the transformation SQL is unchanged and the distributional changes are within expected bounds (as indicated by the novelty score and calibration scores) suggests that the changes are likely due to natural variation in the data rather than corruption.",
+        "roots": [
+          "source_shift"
+        ],
+        "repairs": [],
+        "summary": "The data appears to have shifted slightly, but this is within expected bounds and does not indicate corruption. No repairs are necessary."
+      },
+      "evidence": {
+        "inspect_delivery": {
+          "landing_rows": 2447,
+          "ingested_rows": 2447,
+          "duplicate_source_ids": 0,
+          "missing_source_ids": 0,
+          "unexpected_source_ids": 0,
+          "missing_columns": [],
+          "extra_columns": [],
+          "changed_fields": {},
+          "source_authority": "Immutable landing delivery, not an evaluator answer"
+        },
+        "inspect_dimension": {
+          "rows": 1121,
+          "unique_keys": 1121,
+          "duplicate_keys": 0,
+          "conflicting_keys": 0
+        },
+        "inspect_transform": {
+          "executed_sql": "SELECT r.source_row_id, r.invoice_no, r.stock_code, r.invoice_date,\n       r.quantity, r.unit_price, r.customer_id, r.country,\n       d.product_description,\n       CAST(ROUND(r.quantity * r.unit_price, 2) AS DECIMAL(18,2)) AS revenue\nFROM raw_batch r\nLEFT JOIN dim_products d ON r.stock_code = d.stock_code",
+          "approved_sql": "SELECT r.source_row_id, r.invoice_no, r.stock_code, r.invoice_date,\n       r.quantity, r.unit_price, r.customer_id, r.country,\n       d.product_description,\n       CAST(ROUND(r.quantity * r.unit_price, 2) AS DECIMAL(18,2)) AS revenue\nFROM raw_batch r\nLEFT JOIN dim_products d ON r.stock_code = d.stock_code",
+          "changed": false,
+          "contract": "Preserve each source row once, including returns and missing customer IDs."
+        }
+      },
+      "trace": [
+        {
+          "step": 1,
+          "kind": "decision",
+          "tool": "inspect_delivery",
+          "rationale": "Given that the schema, source-row uniqueness, and delivery completeness checks have passed, we need to verify if the delivered data matches the source exactly. This will help us determine if there are any missing IDs or if the data has been altered in a way that is not immediately obvious from the schema and row count checks alone.",
+          "elapsed_ms": 12247.68
+        },
+        {
+          "step": 1,
+          "kind": "tool",
+          "tool": "inspect_delivery",
+          "result": {
+            "landing_rows": 2447,
+            "ingested_rows": 2447,
+            "duplicate_source_ids": 0,
+            "missing_source_ids": 0,
+            "unexpected_source_ids": 0,
+            "missing_columns": [],
+            "extra_columns": [],
+            "changed_fields": {},
+            "source_authority": "Immutable landing delivery, not an evaluator answer"
+          }
+        },
+        {
+          "step": 2,
+          "kind": "decision",
+          "tool": "inspect_dimension",
+          "rationale": "Given that the schema and delivery are healthy, we should verify if there are any duplicate product keys in the dimension table. This could indicate a potential issue with data integrity or a need for deduplication.",
+          "elapsed_ms": 5687.34
+        },
+        {
+          "step": 2,
+          "kind": "tool",
+          "tool": "inspect_dimension",
+          "result": {
+            "rows": 1121,
+            "unique_keys": 1121,
+            "duplicate_keys": 0,
+            "conflicting_keys": 0
+          }
+        },
+        {
+          "step": 3,
+          "kind": "decision",
+          "tool": "inspect_transform",
+          "rationale": "Given that the transformation execution passed and the fact table has the correct number of rows, we need to verify if the transformation SQL is correct. We will compare the executed SQL with the approved SQL to ensure there are no changes that could have introduced corruption.",
+          "elapsed_ms": 7198.99
+        },
+        {
+          "step": 3,
+          "kind": "tool",
+          "tool": "inspect_transform",
+          "result": {
+            "executed_sql": "SELECT r.source_row_id, r.invoice_no, r.stock_code, r.invoice_date,\n       r.quantity, r.unit_price, r.customer_id, r.country,\n       d.product_description,\n       CAST(ROUND(r.quantity * r.unit_price, 2) AS DECIMAL(18,2)) AS revenue\nFROM raw_batch r\nLEFT JOIN dim_products d ON r.stock_code = d.stock_code",
+            "approved_sql": "SELECT r.source_row_id, r.invoice_no, r.stock_code, r.invoice_date,\n       r.quantity, r.unit_price, r.customer_id, r.country,\n       d.product_description,\n       CAST(ROUND(r.quantity * r.unit_price, 2) AS DECIMAL(18,2)) AS revenue\nFROM raw_batch r\nLEFT JOIN dim_products d ON r.stock_code = d.stock_code",
+            "changed": false,
+            "contract": "Preserve each source row once, including returns and missing customer IDs."
+          }
+        },
+        {
+          "step": 4,
+          "kind": "decision",
+          "tool": "finish",
+          "rationale": "Based on the evidence provided, all checks have passed, and there are no indications of corruption. The schema is correct, source rows are unique, the delivery is complete, and the transformation is as expected. The statistical analysis, while showing some distributional changes, does not provide evidence of corruption. The fact that the transformation SQL is unchanged and the distributional changes are within expected bounds (as indicated by the novelty score and calibration scores) suggests that the changes are likely due to natural variation in the data rather than corruption.",
+          "elapsed_ms": 15891.47
+        }
+      ]
+    },
+    "patches": [],
+    "verification": {
+      "passed": false,
+      "checks": [],
+      "error": null,
+      "exact_output_match": null
+    },
+    "before": {
+      "rows": 2447,
+      "revenue": 144300.8,
+      "unique_ids": 2447
+    },
+    "after": {
+      "rows": 2447,
+      "revenue": 144300.8,
+      "unique_ids": 2447
+    },
+    "elapsed_ms": 41127.55
+  }
+]

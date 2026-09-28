@@ -1,0 +1,9 @@
+FlowCheck — Agentic AI for Data Pipeline Monitoring, Fault Diagnosis, and Verified Repair
+Python | SQL | LangGraph | DuckDB | FastAPI | Ollama | scikit-learn
+
+Primary Google XYZ bullet:
+Engineered FlowCheck to restore 96/96 injected faulty batches with zero unnecessary repairs across 120 controlled offline cases, using Python, DuckDB, LangGraph, and independent output verification on 541K UCI retail records.
+
+Optional supporting bullets:
+- Integrated a local LLM with read-only investigation tools, evidence-constrained repair proposals, human approval, and rollback through a FastAPI dashboard.
+- Compared data contracts, Isolation Forest, and median absolute deviation for fault detection; validated the application with 53 passing tests and 94.6% statement coverage.

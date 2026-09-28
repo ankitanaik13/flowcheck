@@ -1,0 +1,4 @@
+{
+  "status": "Blocked by Docker environment timeout",
+  "detail": "The local Python app and tests pass, but Docker did not complete within its verification deadline. Container execution is not claimed as verified."
+}

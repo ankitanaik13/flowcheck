@@ -1,0 +1,19 @@
+.venv/
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+.coverage
+htmlcov/
+.env
+.tools/
+data/raw/*
+data/processed/*
+artifacts/runs/
+artifacts/state.sqlite*
+artifacts/*.joblib
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+
+# Local diagnostic logs
+artifacts/*.log

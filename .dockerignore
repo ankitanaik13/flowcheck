@@ -1,0 +1,9 @@
+.venv
+.tools
+.git
+.env
+data
+artifacts
+__pycache__
+.pytest_cache
+htmlcov

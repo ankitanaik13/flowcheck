@@ -1,0 +1,17 @@
+.....................................................                    [100%]
+================================ tests coverage ================================
+______________ coverage: platform darwin, python 3.12.14-final-0 _______________
+
+Name                             Stmts   Miss  Cover   Missing
+--------------------------------------------------------------
+src/pipelinemedic/__init__.py        0      0   100%
+src/pipelinemedic/agent.py         160      5    97%   166, 203, 231, 256, 260
+src/pipelinemedic/api.py           129     15    88%   37, 60-61, 94-95, 106, 116, 136, 151-152, 156-159, 166
+src/pipelinemedic/config.py          8      0   100%
+src/pipelinemedic/detection.py      77      0   100%
+src/pipelinemedic/pipeline.py      108      4    96%   66, 78, 115, 124
+src/pipelinemedic/service.py       144     10    93%   141-143, 164-170, 195-196, 210
+--------------------------------------------------------------
+TOTAL                              626     34    95%
+Coverage JSON written to file artifacts/coverage.json
+53 passed in 6.38s

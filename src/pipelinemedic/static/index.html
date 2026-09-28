@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#10262a"><meta name="description" content="FlowCheck — Agentic AI for Data Pipeline Monitoring, Fault Diagnosis, and Verified Repair"><title>FlowCheck · Agentic AI for Data Pipeline Monitoring, Fault Diagnosis, and Verified Repair</title><link rel="icon" href="/static/icon.svg" type="image/svg+xml"><link rel="stylesheet" href="/static/styles.css"><script src="/static/app.js" defer></script></head>
+<body>
+<a class="skip" href="#main">Skip to workspace</a>
+<aside class="sidebar">
+ <a href="/" class="brand"><span class="brandmark">F<span>✓</span></span><span>Flow<span class="muted-brand">Check</span><small>DATA RELIABILITY WORKBENCH</small></span></a>
+ <div class="nav-label">WORKSPACE</div>
+ <nav aria-label="Main navigation">
+  <button class="nav active" data-page="investigate"><span>⌘</span> Investigation lab</button>
+  <button class="nav" data-page="history"><span>↺</span> Run history <b id="run-count">0</b></button>
+  <button class="nav" data-page="benchmark"><span>▥</span> Evaluation</button>
+  <button class="nav" data-page="dataset"><span>▤</span> Dataset & architecture</button>
+ </nav>
+ <div class="sidebar-bottom"><span class="environment">LOCAL SANDBOX</span><p>Real source data.<br>Controlled pipeline failures.</p><a href="/api/report" target="_blank" rel="noopener">Technical report ↗</a><small>v1.0 · Interview workbench</small></div>
+</aside>
+<main id="main">
+ <header class="topbar"><span>Workspace <span class="slash">/</span> <strong id="breadcrumb">Investigation lab</strong></span><span class="status-label" id="health">Connecting…</span></header>
+ <div id="global-error" class="error-banner" role="alert" hidden></div>
+ <section id="page-investigate" class="page">
+  <div class="page-heading"><div><p class="eyebrow">OBSERVE / INVESTIGATE / VERIFY</p><h1>FlowCheck</h1><p class="lede">Agentic AI for Data Pipeline Monitoring, Fault Diagnosis, and Verified Repair</p></div><div class="dataset-stamp"><span class="stamp-icon">▦</span><div><strong>UCI Online Retail</strong><small id="dataset-size">Loading source manifest…</small></div></div></div>
+  <div class="metric-grid" id="overview-metrics"><div class="metric"><span>Source records</span><strong>—</strong></div><div class="metric"><span>Fault scenarios</span><strong>10</strong></div><div class="metric"><span>Repair boundary</span><strong class="text-metric">Isolated copy</strong></div><div class="metric"><span>Source policy</span><strong class="text-metric">Immutable</strong></div></div>
+  <div class="workspace-grid">
+   <section class="panel controls"><div class="panel-title"><h2>Configure an incident</h2><span class="step-label">01</span></div><p class="helper">Failure labels are visible to you, never passed to the investigator.</p>
+    <form id="run-form"><label for="scenario">Failure scenario</label><select id="scenario" name="scenario"></select><p id="scenario-description" class="field-help"></p>
+     <label for="batch-date">Held-out batch</label><select id="batch-date" name="date"></select>
+     <div class="two-fields"><div><label for="seed">Random seed</label><input id="seed" name="seed" type="number" min="0" max="1000000" value="42" required></div><div><label for="severity">Affected fraction</label><select id="severity"><option value="0.1">10%</option><option value="0.3" selected>30%</option><option value="0.6">60%</option></select></div></div>
+     <label for="mode">Investigation engine</label><select id="mode"><option value="offline">Offline · deterministic policy</option><option value="ollama">Live LLM · Ollama</option></select><p class="field-help" id="mode-help">Reproducible evidence policy. No language model calls.</p>
+     <button type="submit" id="run-button" class="primary">Run investigation <span>↗</span></button>
+    </form>
+    <div class="boundary-note"><strong>Guarded by design</strong><p>Read-only probes. Allowlisted repairs. Human approval. Original data stays intact.</p></div>
+   </section>
+   <div class="right-column"><section class="panel lineage-panel"><div class="panel-title"><h2>Pipeline lineage</h2><span class="chip">5 stages</span></div><div class="lineage" id="lineage"></div><div class="legend"><span><i class="dot"></i> Checked stage</span><span><i class="dot amber"></i> Contract failure</span></div></section>
+    <section class="panel trend-panel"><div class="panel-title"><div><h2>Daily net revenue</h2><p class="helper">Observed source history · GBP · includes returns</p></div><span class="chip">2010–2011</span></div><div id="trend" class="chart" role="img" aria-label="Daily net revenue history"></div><div class="chart-caption"><span>Train: through Jul 2011</span><span>Calibrate: Aug</span><span>Evaluate: Sep–Nov</span></div></section>
+   </div>
+  </div>
+  <section id="result-panel" class="panel result-panel" aria-live="polite"><div class="empty-state"><span class="empty-icon">⌁</span><h2>Your investigation starts here</h2><p>Run a scenario to see contract checks, evidence, and a verified repair proposal.</p><div class="flow-labels"><span>Detect</span><span>→</span><span>Investigate</span><span>→</span><span>Verify</span><span>→</span><span>Review</span></div></div></section>
+ </section>
+ <section id="page-history" class="page" hidden><div class="section-heading"><p class="eyebrow">PERSISTENT AUDIT TRAIL</p><h1>Run history</h1><p class="lede">Every investigation, approval, and rollback is recorded locally.</p></div><div class="panel" id="history-content"></div></section>
+ <section id="page-benchmark" class="page" hidden><div class="section-heading"><p class="eyebrow">MEASURED, NOT ASSUMED</p><h1>Evaluation</h1><p class="lede">Controlled faults on held-out dates. These results describe this benchmark, not arbitrary production incidents.</p></div><div id="benchmark-content"></div></section>
+ <section id="page-dataset" class="page" hidden><div class="section-heading"><p class="eyebrow">DATA & SYSTEM DESIGN</p><h1>Built on real records.</h1><p class="lede">A small, auditable pipeline with a deliberately bounded repair surface.</p></div><div id="dataset-content"></div></section>
+ <footer>FlowCheck <span>Source → evidence → verified action</span><a href="https://archive.ics.uci.edu/dataset/352/online+retail" target="_blank" rel="noopener">Dataset attribution ↗</a></footer>
+</main><div id="toast" role="status" hidden></div>
+</body></html>
