@@ -27,17 +27,6 @@ make lint
 
 Dependencies are pinned in `requirements.lock.txt`. Keep `data/`, `.tools/`, `.venv/`, and runtime snapshots out of Git. The original archive checksum is verified by the ingestion script. Dataset download requires internet once; the offline demonstration does not.
 
-## Five-minute demonstration
-
-1. Choose **Join fan-out**, batch **2011-10-05**, seed **42**, affected fraction **30%**.
-2. Run an offline investigation. Explain that the SQL succeeds but multiplies rows.
-3. Open **Evidence trace**. The dimension has duplicate keys; delivery and approved SQL are intact.
-4. Open **Repair & review**. The proposed exact-row deduplication restores 2,447 fact rows and GBP 75,244.43, down from 3,183 rows and GBP 99,330.93 in this controlled incident.
-5. Approve the demo repair, inspect the audit log, and roll it back.
-6. Run **Genuine business change**. Source data changed consistently, so no repair is proposed.
-7. Open **Evaluation**. Discuss why statistical novelty performs poorly as a detector of structural corruption and why strong contracts matter.
-
-Full explanation, research methods, interview questions, three project talking points, and one measured Google XYZ resume bullet are in `docs/PipelineMedic-Report.pdf` and `docs/REPORT.md`.
 
 ## Real data, controlled faults
 
